@@ -20,8 +20,14 @@
             <a href="#">Ejemplo SAP</a> / <a href="#">General</a> /
             <a href="#">5. Juego</a>
         </div>
-        <div class="js-body">{(juego_html)}</div>
-        <button @click="juegoFinalizado()">test</button>
+        <div class="js-body">
+            <iframe
+                class="iframe-juego"
+                src="http://localhost/mod/juego/iframes/index.html"
+                frameborder="0"
+            >
+            </iframe>
+        </div>
     </div>
 </div>
 

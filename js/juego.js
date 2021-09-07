@@ -2,13 +2,11 @@ var app = new Vue({
     el: "#app",
     delimiters: ["{(", ")}"],
     data: {
-        juego_html: "",
+        HTMLcontent: "",
         cursoid: 0,
         puntaje: 0,
     },
-    created() {
-        this.getJuego();
-    },
+    created() {},
     methods: {
         juegoFinalizado: function () {
             let frm = new FormData();
@@ -17,24 +15,6 @@ var app = new Vue({
             frm.append("puntaje", this.puntaje);
             frm.append("sesskey", sesskey);
             axios.post("api/ajax_controller.php", frm).then((res) => {});
-        },
-        getJuego: function () {
-            let headersList = {
-                Accept: "*/*",
-                "Access-Control-Allow-Origin": "*",
-                "Access-Control-Allow-Methods": "GET",
-                "Access-Control-Allow-Headers": "Content-Type, Authorization",
-            };
-
-            let reqOptions = {
-                url: "https://daktico.com/",
-                method: "GET",
-                headers: headersList,
-            };
-
-            axios.request(reqOptions).then(function (res) {
-                console.log(res.data);
-            });
         },
     },
 });
