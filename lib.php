@@ -26,7 +26,7 @@ defined('MOODLE_INTERNAL') || die('Direct access to this script is forbidden.');
 
 // define("LABEL_MAX_NAME_LENGTH", 50);
 
-function juego_supports(string $feature): ?bool {
+function daktico_supports(string $feature): ?bool {
     switch($feature) {
         case FEATURE_GROUPS:
             return true;
@@ -51,7 +51,7 @@ function juego_supports(string $feature): ?bool {
     }
 }
 
-function get_juego_name($data) {
+function get_daktico_name($data) {
     $name = strip_tags(format_string($data->intro,true));
     if (core_text::strlen($name) > LABEL_MAX_NAME_LENGTH) {
         $name = core_text::substr($name, 0, LABEL_MAX_NAME_LENGTH)."...";
@@ -59,7 +59,7 @@ function get_juego_name($data) {
 
     if (empty($name)) {
         // arbitrary name
-        $name = get_string('modulename','juego');
+        $name = get_string('modulename','daktico');
     }
 
     return $name;
@@ -72,12 +72,50 @@ function get_juego_name($data) {
  * @param mod_customcert_mod_form $mform
  * @return int new customcert instance id
  */
-function juego_add_instance($data) {
+function daktico_add_instance($data) {
     global $DB, $USER;
 
     $data->timecreated = time();
     $data->userid = $USER->id;
-    $id = $DB->insert_record("juego", $data);
+
+    $iframeFile = $_FILES['iframeFile'];
+    if(!empty($iframeFile)) {
+        $filename = urlencode(preg_replace("/[^a-zA-Z0-9.]/", "", time().$iframeFile['name']));
+        $pathName = __DIR__."/iframes/".$filename;
+
+        if(!file_exists(dirname($pathName))) {
+            mkdir(dirname($pathName), 0777, true);
+        }
+
+        // var_dump($pathName);
+
+        $location = $pathName;
+        $uploadOk = 1;
+        $fileType = pathinfo($location,PATHINFO_EXTENSION);
+
+        /* Valid Extensions */
+        $valid_extensions = array("html");
+        /* Check file extension */
+        if( !in_array(strtolower($fileType), $valid_extensions) ) {
+            $uploadOk = 0;
+        }
+
+        if($uploadOk == 0){
+            $responseStatus = false;
+        }else{
+            /* Upload file */
+            $fullPathLocation = $pathName;
+            if(!move_uploaded_file($iframeFile['tmp_name'], $fullPathLocation)){
+                echo 0;
+            }
+        }
+        $data->imagen = $filename;
+        $data->pathfile = $pathName;
+        $data->moduleid = $data->coursemodule;
+        $data->jsondata = json_encode($data);
+    }
+
+    $id = $DB->insert_record("daktico", $data);
     return $id;
 }
 
@@ -90,18 +128,18 @@ function juego_add_instance($data) {
  * @param object $label
  * @return bool
  */
-function juego_update_instance($data) {
+function daktico_update_instance($data) {
     global $DB;
 
-    // $data->titulo = get_juego_name($data);
+    // $data->titulo = get_daktico_name($data);
     $data->timemodified = time();
     $data->id = $data->instance;
     $data->introformat = 0;
 
     $completiontimeexpected = !empty($data->completionexpected) ? $data->completionexpected : null;
-    \core_completion\api::update_completion_date_event($data->coursemodule, 'juego', $data->id, $completiontimeexpected);
+    \core_completion\api::update_completion_date_event($data->coursemodule, 'daktico', $data->id, $completiontimeexpected);
 
-    return $DB->update_record("juego", $data);
+    return $DB->update_record("daktico", $data);
 }
 
 /**
@@ -113,19 +151,19 @@ function juego_update_instance($data) {
  * @param int $id
  * @return bool
  */
-function juego_delete_instance($id) {
+function daktico_delete_instance($id) {
     global $DB;
 
-    if (! $data = $DB->get_record("juego", array("id"=>$id))) {
+    if (! $data = $DB->get_record("daktico", array("id"=>$id))) {
         return false;
     }
 
     $result = true;
 
-    $cm = get_coursemodule_from_instance('juego', $id);
-    \core_completion\api::update_completion_date_event($cm->id, 'juego', $data->id, null);
+    $cm = get_coursemodule_from_instance('daktico', $id);
+    \core_completion\api::update_completion_date_event($cm->id, 'daktico', $data->id, null);
 
-    if (! $DB->delete_records("juego", array("id"=>$data->id))) {
+    if (! $DB->delete_records("daktico", array("id"=>$data->id))) {
         $result = false;
     }
 

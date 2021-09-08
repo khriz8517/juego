@@ -5,9 +5,9 @@ if (!defined('MOODLE_INTERNAL')) {
 }
 
 require_once($CFG->dirroot.'/course/moodleform_mod.php');
-require_once($CFG->dirroot.'/mod/juego/lib.php');
+require_once($CFG->dirroot.'/mod/daktico/lib.php');
 
-class mod_juego_mod_form extends moodleform_mod {
+class mod_daktico_mod_form extends moodleform_mod {
 
     function definition() {
         // global $CFG, $DB, $OUTPUT;
@@ -19,11 +19,13 @@ class mod_juego_mod_form extends moodleform_mod {
 
         $mform->addElement('header', 'generalhdr', get_string('general'));
 
-        $mform->addElement('text', 'name', get_string('juegoname', 'juego'), array('size'=>'64'));
+        $mform->addElement('text', 'name', get_string('dakticoname', 'daktico'), array('size'=>'64'));
 
-        // $mform->addElement('text', 'name', get_string('juegoname', 'juego'), array('size'=>'64'));
+        // $mform->addElement('text', 'name', get_string('dakticoname', 'daktico'), array('size'=>'64'));
         $mform->setType('name', PARAM_TEXT);
         $mform->addRule('name', null, 'required', null, 'client');
+
+        $mform->addElement('file', 'iframeFile', 'Archivo HTML');
 
         $this->standard_coursemodule_elements();
 

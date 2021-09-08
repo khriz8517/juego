@@ -42,11 +42,17 @@ try {
 			$sesskey = $_REQUEST['sesskey'];
 			$returnArr = materialesMarcadosByUser($materialid, $sesskey);
 			break;
-		case 'actualizarEstadoJuegoByUser':
+		case 'actualizarEstadodakticoByUser':
 			$cursoid = $_REQUEST['cursoid'];
 			$puntaje = $_REQUEST['puntaje'];
 			$sesskey = $_REQUEST['sesskey'];
-			$returnArr = actualizarEstadoJuegoByUser($cursoid, $puntaje, $sesskey);
+			$returnArr = actualizarEstadodakticoByUser($cursoid, $puntaje, $sesskey);
+			break;
+		case 'actividadCompletada':
+			$coursemoduleid = $_REQUEST['coursemoduleid'];
+			$completionstate = $_REQUEST['completionstate'];
+			$sesskey = $_REQUEST['sesskey'];
+			$returnArr = actividadCompletada($coursemoduleid, $completionstate, $sesskey);
 			break;
 	}
 
@@ -418,16 +424,16 @@ function insertarOpcionesPregunta($opcion, $preguntaid, $active, $is_valid, $ses
 }
 
 /**
- * actualizarEstadoJuegoByUser
- * * funcion que inserta o actualiza el resultado del juego que obtuvo un usuario
+ * actualizarEstadodakticoByUser
+ * * funcion que inserta o actualiza el resultado del daktico que obtuvo un usuario
  * ! estado 1 = aprobado / 0 = desaprobado
  * ? la nota minima aprobatoria deberia ser del 80%? 
  * ? cual es el puntaje maximo
  */
 
-function actualizarEstadoJuegoByUser($cursoid, $puntaje, $sesskey){
+function actualizarEstadodakticoByUser($cursoid, $puntaje, $sesskey){
 	global $DB, $USER;
-	// require_sesskey();
+	require_sesskey();
 
 	$puntaje_maximo = 100;
 	$userid = $USER->id;
@@ -435,7 +441,7 @@ function actualizarEstadoJuegoByUser($cursoid, $puntaje, $sesskey){
 	$nombrecompleto = $USER->firstname.' '.$USER->lastname;
 	$estado = $puntaje * 100 / $puntaje_maximo;
 
-	$if_exists = $DB->get_records('aq_juego_estado', [
+	$if_exists = $DB->get_records('aq_daktico_estado', [
 		'cursoid' => $cursoid,
 		'userid' => $userid,
 	]);
@@ -448,7 +454,7 @@ function actualizarEstadoJuegoByUser($cursoid, $puntaje, $sesskey){
 				'estado' => $estado >= 80 ? 1 : 0,
 				'updated_at' => time()
 			);
-			$DB->update_record('aq_juego_estado', $data);
+			$DB->update_record('aq_daktico_estado', $data);
 		}
 		$res = [
 			'userid' => $userid,
@@ -457,7 +463,7 @@ function actualizarEstadoJuegoByUser($cursoid, $puntaje, $sesskey){
 			'cursoid' => $cursoid,
 			'status' => true,
 		];
-		return json_encode($res);
+		return $res;
 	}else{
 		$data = array(
 			'cursoid' => $cursoid,
@@ -467,7 +473,7 @@ function actualizarEstadoJuegoByUser($cursoid, $puntaje, $sesskey){
 			'estado' => $estado >= 80 ? 1 : 0,
 			'created_at' => time()
 		);
-		$DB->insert_record('aq_juego_estado', $data);
+		$DB->insert_record('aq_daktico_estado', $data);
 		$res = [
 			'userid' => $userid,
 			'username' => $username,
@@ -475,6 +481,47 @@ function actualizarEstadoJuegoByUser($cursoid, $puntaje, $sesskey){
 			'cursoid' => $cursoid,
 			'status' => true,
 		];
-		return json_encode($res);
+		return $res;
+	}
+}
+
+function actividadCompletada($coursemoduleid, $completionstate, $sesskey){
+	global $DB, $USER;
+	require_sesskey();
+
+	$if_exists = $DB->get_records('course_modules_completion', [
+		'coursemoduleid' => $coursemoduleid,
+		'userid' => $USER->id,
+	]);
+
+	if($if_exists){
+		foreach ($if_exists as $key => $value) {
+			$data = array(
+				'id' => $value->id,
+				'completionstate' => $completionstate,
+				'timemodified' => time()
+			);
+			$DB->update_record('course_modules_completion', $data);
+		}
+		$res = [
+			'userid' => $USER->id,
+			'completionstate' => $completionstate,
+			'status' => true,
+		];
+		return $res;
+	}else{
+		$data = array(
+			'coursemoduleid' => $coursemoduleid,
+			'completionstate' => $completionstate,
+			'userid' => $USER->id,
+			'timemodified' => time()
+		);
+		$DB->insert_record('course_modules_completion', $data);
+		$res = [
+			'completionstate' => $completionstate,
+			'userid' => $USER->id,
+			'status' => true,
+		];
+		return $res;
 	}
 }

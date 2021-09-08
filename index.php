@@ -6,7 +6,7 @@ global $DB;
 require_login();
 
 $context = context_system::instance();
-$PAGE->set_url(new moodle_url('/mod/juego/index.php'));
+$PAGE->set_url(new moodle_url('/mod/daktico/index.php'));
 $PAGE->set_context(\context_system::instance());
 $PAGE->set_title('Activities Qroma Plugin');
 $PAGE->set_heading('Activities Qroma Plugin');
@@ -20,5 +20,5 @@ $templateContext = (object)[
 ];
 
 echo $OUTPUT->header();
-echo $OUTPUT->render_from_template('mod_juego/index', $templateContext);
+echo $OUTPUT->render_from_template('mod_daktico/index', $templateContext);
 echo $OUTPUT->footer();
