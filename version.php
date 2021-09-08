@@ -1,4 +1,4 @@
 <?php
 
 $plugin->component = 'mod_juego';
-$plugin->version = 2020081800;
+$plugin->version = 2020081801;

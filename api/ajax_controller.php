@@ -431,6 +431,8 @@ function actualizarEstadoJuegoByUser($cursoid, $puntaje, $sesskey){
 
 	$puntaje_maximo = 100;
 	$userid = $USER->id;
+	$username = $USER->username;
+	$nombrecompleto = $USER->firstname.' '.$USER->lastname;
 	$estado = $puntaje * 100 / $puntaje_maximo;
 
 	$if_exists = $DB->get_records('aq_juego_estado', [
@@ -448,8 +450,14 @@ function actualizarEstadoJuegoByUser($cursoid, $puntaje, $sesskey){
 			);
 			$DB->update_record('aq_juego_estado', $data);
 		}
-		$returnArr['status'] = true;
-		return json_encode($returnArr);
+		$res = [
+			'userid' => $userid,
+			'username' => $username,
+			'nombrecompleto' => $nombrecompleto,
+			'cursoid' => $cursoid,
+			'status' => true,
+		];
+		return json_encode($res);
 	}else{
 		$data = array(
 			'cursoid' => $cursoid,
@@ -460,7 +468,13 @@ function actualizarEstadoJuegoByUser($cursoid, $puntaje, $sesskey){
 			'created_at' => time()
 		);
 		$DB->insert_record('aq_juego_estado', $data);
-		$returnArr['status'] = true;
-		return json_encode($returnArr);
+		$res = [
+			'userid' => $userid,
+			'username' => $username,
+			'nombrecompleto' => $nombrecompleto,
+			'cursoid' => $cursoid,
+			'status' => true,
+		];
+		return json_encode($res);
 	}
 }

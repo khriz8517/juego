@@ -56,3 +56,4 @@ $string['modulenameplural'] = 'juegos';
 $string['modulename_help'] = 'Este módulo se encarga de administrar las juegos de cursos';
 $string['pluginname'] = 'juego';
 $string['introjuego'] = 'Imagen';
+$string['pluginadministration'] = 'Juego';

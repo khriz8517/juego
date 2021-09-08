@@ -15,7 +15,8 @@ $iframe_link = $DB->get_field('aq_iframe_page', 'iframe_link', ['id'=>1]);
 
 $templateContext = (object)[
     'sesskey' => sesskey(),
-    'iframe_link' => $iframe_link
+    'iframe_link' => $iframe_link,
+    'cursoid' => $cm->course
 ];
 
 echo $OUTPUT->header();

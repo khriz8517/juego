@@ -24,7 +24,7 @@
 
 defined('MOODLE_INTERNAL') || die('Direct access to this script is forbidden.');
 
-define("LABEL_MAX_NAME_LENGTH", 50);
+// define("LABEL_MAX_NAME_LENGTH", 50);
 
 function juego_supports(string $feature): ?bool {
     switch($feature) {
@@ -51,7 +51,7 @@ function juego_supports(string $feature): ?bool {
     }
 }
 
-function get_data_name($data) {
+function get_juego_name($data) {
     $name = strip_tags(format_string($data->intro,true));
     if (core_text::strlen($name) > LABEL_MAX_NAME_LENGTH) {
         $name = core_text::substr($name, 0, LABEL_MAX_NAME_LENGTH)."...";
@@ -75,48 +75,9 @@ function get_data_name($data) {
 function juego_add_instance($data) {
     global $DB, $USER;
 
-    $data->name = $data->titulo;
     $data->timecreated = time();
     $data->userid = $USER->id;
-
-    $juegoFile = $_FILES['introjuego'];
-
-    if(!empty($juegoFile)) {
-        $filename = urlencode(preg_replace("/[^a-zA-Z0-9.]/", "", $juegoFile['name']));
-        $pathName = __DIR__."/files/juegosbase/".$data->courseId."/".$filename;
-
-        if(!file_exists(dirname($pathName))) {
-            mkdir(dirname($pathName), 0777, true);
-        }
-
-        $location = $pathName;
-        $uploadOk = 1;
-        $imageFileType = pathinfo($location,PATHINFO_EXTENSION);
-
-        /* Valid Extensions */
-        $valid_extensions = array("jpg","jpeg","png","gif","jfif");
-        /* Check file extension */
-        if( !in_array(strtolower($imageFileType), $valid_extensions) ) {
-            $uploadOk = 0;
-        }
-
-        if($uploadOk == 0){
-            $responseStatus = false;
-        }else{
-            /* Upload file */
-            $fullPathLocation = $pathName;
-            if(!move_uploaded_file($juegoFile['tmp_name'], $fullPathLocation)){
-                echo 0;
-            }
-        }
-        $data->imagen = $filename;
-    }
-
     $id = $DB->insert_record("juego", $data);
-
-//    $completiontimeexpected = !empty($data->completionexpected) ? $data->completionexpected : null;
-//    \core_completion\api::update_completion_date_event($data->coursemodule, 'juego', $id, $completiontimeexpected);
-
     return $id;
 }
 
@@ -132,7 +93,7 @@ function juego_add_instance($data) {
 function juego_update_instance($data) {
     global $DB;
 
-    $data->titulo = get_data_name($data);
+    // $data->titulo = get_juego_name($data);
     $data->timemodified = time();
     $data->id = $data->instance;
     $data->introformat = 0;
