@@ -19,11 +19,14 @@ global $DB, $USER, $CFG;
 
 require_login();
 
+$strpages = get_string('modulenameplural', 'daktico');
+
 $context = context_system::instance();
 $PAGE->set_url(new moodle_url('/mod/daktico/index.php'));
 $PAGE->set_context(\context_system::instance());
 $PAGE->set_title('Daktico');
 $PAGE->set_heading('Daktico');
+// $PAGE->navbar->add($strpages);
 
 $iframe_link = $DB->get_field('daktico', 'imagen', ['moduleid'=>$id]);
 

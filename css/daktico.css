@@ -4,7 +4,7 @@ body {
 }
 .daktico-section {
     background-color: #f0f5f5;
-    padding: 2em;
+    /* padding: 2em; */
     font-family: "Nunito", sans-serif;
 }
 .js-title {
@@ -28,7 +28,7 @@ body {
 
 .js-body {
     background-color: #fff;
-    padding: 1em 2em;
+    /* padding: 1em 2em; */
     border-radius: 5px;
 }
 
@@ -42,7 +42,7 @@ body {
         padding: 0em;
     }
     .js-body {
-        padding: 1em 1em;
+        /* padding: 1em 1em; */
     }
     .jsb-question {
         padding: 5px 1em;
