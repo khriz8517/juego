@@ -26,7 +26,9 @@ $PAGE->set_url(new moodle_url('/mod/daktico/index.php'));
 $PAGE->set_context(\context_system::instance());
 $PAGE->set_title('Daktico');
 $PAGE->set_heading('Daktico');
-// $PAGE->navbar->add($strpages);
+// $previewnode = $PAGE->navigation->add(get_string('preview'), new moodle_url('/a/link/if/you/want/one.php'), navigation_node::TYPE_CONTAINER);
+// $thingnode = $previewnode->add(get_string('name of thing'), new moodle_url('/a/link/if/you/want/one.php'));
+// $thingnode->make_active();
 
 $iframe_link = $DB->get_field('daktico', 'imagen', ['moduleid'=>$id]);
 
