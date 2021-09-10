@@ -2,6 +2,9 @@
 
 require_once('../../config.php');
 require_once('lib.php');
+// require_once($CFG->dirroot.'/mod/page/lib.php');
+// require_once($CFG->dirroot.'/mod/page/locallib.php');
+// require_once($CFG->libdir.'/completionlib.php');
 
 $id = required_param('id', PARAM_INT);    // Course Module ID
 
@@ -26,9 +29,9 @@ $PAGE->set_url(new moodle_url('/mod/daktico/index.php'));
 $PAGE->set_context(\context_system::instance());
 $PAGE->set_title('Daktico');
 $PAGE->set_heading('Daktico');
-// $previewnode = $PAGE->navigation->add(get_string('preview'), new moodle_url('/a/link/if/you/want/one.php'), navigation_node::TYPE_CONTAINER);
-// $thingnode = $previewnode->add(get_string('name of thing'), new moodle_url('/a/link/if/you/want/one.php'));
-// $thingnode->make_active();
+
+// $course = $DB->get_record('course', array('id'=>$cm->course), '*', MUST_EXIST);
+// require_course_login($course, true, $cm);
 
 $iframe_link = $DB->get_field('daktico', 'imagen', ['moduleid'=>$id]);
 
