@@ -31,7 +31,7 @@ $PAGE->set_title('Daktico');
 $PAGE->set_heading('Daktico');
 
 $course = $DB->get_record('course', array('id'=>$cm->course), '*', MUST_EXIST);
-require_course_login($course, true, $cm);
+require_course_login($course, true, $cm); 
 
 $iframe_link = $DB->get_field('daktico', 'imagen', ['moduleid'=>$id]);
 
