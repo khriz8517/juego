@@ -27,6 +27,12 @@ class mod_daktico_mod_form extends moodleform_mod {
 
         $mform->addElement('file', 'iframeFile', 'Archivo HTML');
 
+        // $mform->addElement('filepicker', 'iframeFile','Archivo HTML', null,
+        //            array('maxbytes' => 1000000, 'accepted_types' => array('.html')));
+        // $mform->addRule('iframeFile', null, 'required', null, 'client');
+        // $mform->setType('iframeFile', PARAM_RAW);
+
+        $this->standard_intro_elements();
         $this->standard_coursemodule_elements();
 
         $this->add_action_buttons();
