@@ -23,5 +23,17 @@ var app = new Vue({
             frm.append("sesskey", sesskey);
             axios.post("api/ajax_controller.php", frm).then((res) => {});
         },
+        toggleCompletion: function () {
+            let frm = new FormData();
+            frm.append("id", coursemoduleid);
+            frm.append("completionstate", 1);
+            frm.append("fromajax", 1);
+            frm.append("sesskey", sesskey);
+            axios
+                .post(url + "/course/togglecompletion.php", frm)
+                .then((res) => {
+                    console.log(res);
+                });
+        },
     },
 });
